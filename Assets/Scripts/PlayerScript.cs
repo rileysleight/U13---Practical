@@ -36,6 +36,7 @@ public class PlayerScript : MonoBehaviour
         if (transform.hasChanged)
         {
             animator.SetBool("Idle", false);
+            animator.SetBool("Attack", false);
             animator.SetBool("Walk", true);
             transform.hasChanged = false;
         }
@@ -54,7 +55,17 @@ public class PlayerScript : MonoBehaviour
         {
             RotateTowardMouseVector();
         }
+
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+             Debug.Log("Attack");
+            animator.SetBool("Attack", true);
+            animator.SetBool("Walk", false);
+            animator.SetBool("Idle", false);
+        }
     }
+
+
 
     private void RotateTowardMouseVector()
     {
