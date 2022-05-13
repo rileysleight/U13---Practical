@@ -13,6 +13,7 @@ public class PlayerScript : MonoBehaviour
     private bool rotateTowardsMouse;
     
     public Camera m_MainCamera;
+    private Animator animator;
     
 
     private void Awake()
@@ -24,13 +25,25 @@ public class PlayerScript : MonoBehaviour
 
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
 
-    void Update()
+    void FixedUpdate()
     {
         var targetVector = new Vector3(_input.InputVector.x, 0, _input.InputVector.y);  
+
+        if (transform.hasChanged)
+        {
+            animator.SetBool("Idle", false);
+            animator.SetBool("Walk", true);
+            transform.hasChanged = false;
+        }
+        else
+        {
+            animator.SetBool("Idle", true);
+            animator.SetBool("Walk", false);
+        }
 
         var movementVector = MoveTowardTarget(targetVector);  
         if(!rotateTowardsMouse)
@@ -67,6 +80,7 @@ public class PlayerScript : MonoBehaviour
         var speed = moveSpeed * Time.deltaTime;
         var targetPosition = transform.position + targetVector * speed;
         transform.position = targetPosition;
+
         return targetVector;
     }
 }
