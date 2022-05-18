@@ -15,8 +15,6 @@ public class PlayerScript : MonoBehaviour
     public Camera m_MainCamera;
     private Animator animator;
     public Collider lightCollider;
-    private bool walkCheck;
-    private bool idleCheck;
 
     enum States
     {
@@ -52,22 +50,38 @@ public class PlayerScript : MonoBehaviour
             animator.SetBool("Idle", false);
             animator.SetBool("Attack", false);
             animator.SetBool("Walk", true);
+            transform.hasChanged = false;
         }
 
         if( state == States.Idle )
         {
-            walkCheckCheckForWalk();
+            //CheckForWalk();
             animator.SetBool("Idle", true);
         }
 
         if( state == States.Attack )
         {
-            DoAttack();
+            //DoAttack();
+        }
 
+
+
+        
+
+        if (transform.hasChanged)
+        {
+            animator.SetBool("Idle", false);
+            animator.SetBool("Attack", false);
+            animator.SetBool("Walk", true);
+            transform.hasChanged = false;
+        }
+        else
+        {
+            animator.SetBool("Idle", true);
+            animator.SetBool("Walk", false);
         }
 
         var movementVector = MoveTowardTarget(targetVector);  
-
         if(!rotateTowardsMouse)
         {
             RotateTowardMovementVector  (movementVector); 
@@ -76,7 +90,42 @@ public class PlayerScript : MonoBehaviour
         {
             RotateTowardMouseVector();
         }
+
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            //Debug.Log("Attack");
+            animator.SetBool("Attack", true);
+            animator.SetBool("Walk", false);
+            animator.SetBool("Idle", false);
+        }
     }
+
+    /*void Update()
+    {
+        if (transform.hasChanged)
+        {
+            animator.SetBool("Idle", false);
+            animator.SetBool("Attack", false);
+            animator.SetBool("Walk", true);
+            transform.hasChanged = false;
+        }
+        else
+        {
+            animator.SetBool("Idle", true);
+            animator.SetBool("Walk", false);
+        }
+
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            //Debug.Log("Attack");
+            animator.SetBool("Attack", true);
+            animator.SetBool("Walk", false);
+            animator.SetBool("Idle", false);
+        }
+
+
+        
+    }*/
 
     private void LightAttack()
     {
@@ -118,7 +167,13 @@ public class PlayerScript : MonoBehaviour
     }
 
 
-
+    void CheckForWalk()
+    {
+        if( (_input.InputVector.x != 0) || (_input.InputVector.y !=0) )
+        {
+            state = States.Walk;
+        }
+    }
 
     void DoWalk()
     {
@@ -128,38 +183,14 @@ public class PlayerScript : MonoBehaviour
 
     void DoIdle()
     {
-        animator.SetBool("Idle", true);
+
     }
 
-    void DoAttack()
+    void CheckForIdle()
     {
-        animator.SetBool("Idle", false);
-        animator.SetBool("Walk", false);
-        animator.SetBool("Attack", true);
+        // check for no input
     }
 
-    bool CheckForWalk(bool walkCheck)
-    {
-        if( (_input.InputVector.x != 0) || (_input.InputVector.y !=0) )
-        {
-            walkCheck = true;
-        }
-        return walkCheck;
-    }
-
-    void CheckForIdle(bool idleCheck)
-    {
-        if( (_input.InputVector.x == 0) || (_input.InputVector.y ==0) )
-        {
-            idleCheck = true;
-        }
-        return idleCheck;
-    }
-
-    //void CheckForAttack()
-    //{
-
-    //}
 
 
 
