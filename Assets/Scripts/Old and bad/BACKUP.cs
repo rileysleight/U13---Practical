@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -100,7 +100,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    /*void Update()
+    void Update()
     {
         if (transform.hasChanged)
         {
@@ -125,7 +125,7 @@ public class PlayerScript : MonoBehaviour
 
 
         
-    }*/
+    }
 
     private void LightAttack()
     {
@@ -190,15 +190,16 @@ public class PlayerScript : MonoBehaviour
     {
         // check for no input
     }
-
-
-
-
-
-
-
-
-
-
-
 }
+*/
+
+
+
+
+
+
+
+
+
+
+

@@ -5,20 +5,100 @@ using UnityEngine.AI;
 
 public class EnemyScript1 : MonoBehaviour
 {
-
+    public Transform enemy;
     public Transform goal;
     private NavMeshAgent agent;
+    public Collider lightCollider;
+    private Animator animator;
 
-    // Start is called before the first frame update
+    enum States
+    {   
+        Idle,
+        Walk,
+        Attack,
+        Die
+    }
+
+    States state;
+
+    //S
     void Start()
     {
+        animator = GetComponent<Animator>();
+
         agent = GetComponent<NavMeshAgent>();
-        agent.destination = goal.position; 
+        //agent.destination = goal.position; 
+        state = States.Idle;
     }
 
-    // Update is called once per frame
+    //U
     void Update()
     {
-        agent.destination = goal.position;
+        //agent.destination = goal.position;
+        var dist = Vector3.Distance( transform.position, goal.transform.position);
+        //Debug.Log(dist);
+
+        if( state == States.Idle )
+        {
+            animator.SetBool("EnemyWalk", false);
+            animator.SetBool("EnemyIdle", true);
+            if (dist <= 6)
+            {
+                state = States.Walk;
+            }
+        }
+        if( state == States.Walk )
+        {
+            agent.destination = goal.position;
+            animator.SetBool("EnemyAttack", false);
+            animator.SetBool("EnemyIdle", false);
+            animator.SetBool("EnemyWalk", true);
+            if (dist <= 2)
+            {
+                state = States.Attack;
+            }
+            else if (dist > 6)
+            {
+                state = States.Idle;
+            }
+        }
+        if( state == States.Attack )
+        {
+            agent.destination = goal.position;
+            animator.SetBool("EnemyWalk", false);
+            animator.SetBool("EnemyAttack", true);
+            if (dist > 2)
+            {
+                state = States.Walk;
+            }
+        }
+        if( state == States.Die)
+        {
+            //animator.SetBool("EnemyDeath", true);
+            Destroy(gameObject);
+        }
+  
+
+
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PlayerAttack"))
+        {
+            state = States.Die;
+        }
+    }
+
+    void EnemyAttack()
+    {
+        lightCollider.enabled = !lightCollider.enabled;
+        gameObject.tag = "EnemyAttack";
+    }
+    private void EnemyAttackEnd()
+    {
+        lightCollider.enabled = !lightCollider.enabled;
+        gameObject.tag = "Enemy";
+    }
+
 }
