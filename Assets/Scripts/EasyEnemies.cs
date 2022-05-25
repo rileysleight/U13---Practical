@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyScript1 : MonoBehaviour
+public class EasyEnemies : MonoBehaviour
 {
     public Transform enemy;
     public Transform goal;
@@ -44,6 +44,7 @@ public class EnemyScript1 : MonoBehaviour
         if( state == States.Idle )
         {
             animator.SetBool("EnemyWalk", false);
+            animator.SetBool("EnemyAttack", false);
             animator.SetBool("EnemyIdle", true);
             transform.LookAt(goal.transform);
             if (dist <= 6)
@@ -57,7 +58,7 @@ public class EnemyScript1 : MonoBehaviour
             animator.SetBool("EnemyAttack", false);
             animator.SetBool("EnemyIdle", false);
             animator.SetBool("EnemyWalk", true);
-            if (dist <= 2)
+            if (dist <= 1.5)
             {
                 state = States.Attack;
             }
@@ -71,7 +72,7 @@ public class EnemyScript1 : MonoBehaviour
             agent.destination = goal.position;
             animator.SetBool("EnemyWalk", false);
             animator.SetBool("EnemyAttack", true);
-            if (dist > 2)
+            if (dist > 1.5)
             {
                 state = States.Walk;
             }
@@ -106,28 +107,4 @@ public class EnemyScript1 : MonoBehaviour
         gameObject.tag = "Enemy";
     }
 
-    void DoWalk()
-    {
-        agent.destination = goal.position;
-            animator.SetBool("EnemyAttack", false);
-            animator.SetBool("EnemyIdle", false);
-            animator.SetBool("EnemyWalk", true);
-    }
-
-
-    void DoIdle()
-    {
-        animator.SetBool("WalkAttack", false);
-        animator.SetBool("Attack", false);
-        animator.SetBool("Walk", false);
-        animator.SetBool("Idle", true);
-    }
-
-    void DoAttack()
-    {
-        animator.SetBool("Idle", false);
-        animator.SetBool("Walk", false);
-        animator.SetBool("WalkAttack", false);
-        animator.SetBool("Attack", true);
-    }
 }

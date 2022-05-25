@@ -15,6 +15,7 @@ public class PlayerScript : MonoBehaviour
     public Camera m_MainCamera;
     private Animator animator;
     public Collider lightCollider;
+    public Collider defCollider;
     public int health = 5;
     private bool walkCheck;
     private bool idleCheck;
@@ -26,7 +27,9 @@ public class PlayerScript : MonoBehaviour
         Idle,
         Walk,
         Attack,
-        WAttack
+        WAttack,
+        Defend,
+        WDefend
     }
 
     States state;
@@ -127,6 +130,8 @@ public class PlayerScript : MonoBehaviour
 
         }
 
+
+
         var movementVector = MoveTowardTarget(targetVector);  
 
         if(!rotateTowardsMouse)
@@ -188,10 +193,10 @@ public class PlayerScript : MonoBehaviour
 
     void DoWalk()
     {
-        animator.SetBool("Idle", false);
-        animator.SetBool("Attack", false);
-        animator.SetBool("WalkAttack", false);
-        animator.SetBool("Walk", true);
+        agent.destination = goal.position;
+        animator.SetBool("EnemyAttack", false);
+        animator.SetBool("EnemyIdle", false);
+        animator.SetBool("EnemyWalk", true);
     }
 
 
@@ -293,6 +298,7 @@ public class PlayerScript : MonoBehaviour
         if (other.CompareTag("EnemyAttack"))
         {
             health = health -1;
+            
         }
     }
 
