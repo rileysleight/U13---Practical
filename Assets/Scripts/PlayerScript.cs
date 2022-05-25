@@ -22,6 +22,9 @@ public class PlayerScript : MonoBehaviour
     private bool attackCheck;
     private bool WAttackCheck;
 
+
+    private Rigidbody rb;
+
     enum States
     {
         Idle,
@@ -43,6 +46,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
         
 
         state = States.Idle;
@@ -91,6 +95,14 @@ public class PlayerScript : MonoBehaviour
             {
                 state = States.Attack;
             }
+
+            //print("xv=" + rb.velocity.x + "  zv=" + rb.velocity.z);
+
+            // adding friction
+
+            rb.velocity = new Vector3( rb.velocity.x * 0.9f, rb.velocity.y, rb.velocity.z * 0.9f);
+
+
             
         }
 
@@ -193,7 +205,7 @@ public class PlayerScript : MonoBehaviour
 
     void DoWalk()
     {
-        agent.destination = goal.position;
+        //agent.destination = goal.position;
         animator.SetBool("EnemyAttack", false);
         animator.SetBool("EnemyIdle", false);
         animator.SetBool("EnemyWalk", true);
