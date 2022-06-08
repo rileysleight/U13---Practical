@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -11,16 +12,21 @@ public class PlayerScript : MonoBehaviour
     private float rotateSpeed;
     [SerializeField]
     private bool rotateTowardsMouse;
-    
+
+    public Text enemiesText;
+    public Text healthText;
     public Camera m_MainCamera;
     private Animator animator;
     public Collider lightCollider;
     public Collider defCollider;
-    public int health = 5;
+    public int health = 20;
+    public string healthString = "20";
     private bool walkCheck;
     private bool idleCheck;
     private bool attackCheck;
     private bool WAttackCheck;
+
+    //public Text;
 
 
     private Rigidbody rb;
@@ -48,13 +54,14 @@ public class PlayerScript : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         
-
+        healthText.text = health.ToString();
         state = States.Idle;
     }
 
 
     void Update()
     {
+        healthText.text = health.ToString();
     
         var targetVector = new Vector3(_input.InputVector.x, 0, _input.InputVector.y);  
 

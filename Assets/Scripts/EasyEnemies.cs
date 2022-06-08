@@ -10,12 +10,13 @@ public class EasyEnemies : MonoBehaviour
     private NavMeshAgent agent;
     public Collider lightCollider;
     private Animator animator;
+    private Rigidbody rb;
     
 
     enum States
     {   
         Idle,
-        Walk,
+        //Walk,
         Attack,
         Die
     }
@@ -26,6 +27,7 @@ public class EasyEnemies : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
 
         
 
@@ -37,28 +39,30 @@ public class EasyEnemies : MonoBehaviour
     //U
     void Update()
     {
+        rb.velocity = new Vector3( rb.velocity.x * 0f, rb.velocity.y, rb.velocity.z * 0f);
+
         //agent.destination = goal.position;
         var dist = Vector3.Distance( transform.position, goal.transform.position);
         //Debug.Log(dist);
 
         if( state == States.Idle )
         {
-            animator.SetBool("EnemyWalk", false);
             animator.SetBool("EnemyAttack", false);
             animator.SetBool("EnemyIdle", true);
             transform.LookAt(goal.transform);
-            if (dist <= 6)
+            if (dist <= 3)
             {
-                state = States.Walk;
+                //state = States.Walk;
+                state = States.Attack;
             }
         }
-        if( state == States.Walk )
+        /*if( state == States.Walk )
         {
             agent.destination = goal.position;
             animator.SetBool("EnemyAttack", false);
             animator.SetBool("EnemyIdle", false);
             animator.SetBool("EnemyWalk", true);
-            if (dist <= 1.5)
+            if (dist <= 2)
             {
                 state = States.Attack;
             }
@@ -66,15 +70,16 @@ public class EasyEnemies : MonoBehaviour
             {
                 state = States.Idle;
             }
-        }
+        }*/
         if( state == States.Attack )
         {
-            agent.destination = goal.position;
-            animator.SetBool("EnemyWalk", false);
+            //agent.destination = goal.position;
+            animator.SetBool("EnemyIdle", false);
             animator.SetBool("EnemyAttack", true);
-            if (dist > 1.5)
+            if (dist > 3)
             {
-                state = States.Walk;
+                //state = States.Walk;
+                state = States.Idle;
             }
         }
         if( state == States.Die)
@@ -105,6 +110,31 @@ public class EasyEnemies : MonoBehaviour
     {
         lightCollider.enabled = !lightCollider.enabled;
         gameObject.tag = "Enemy";
+    }
+
+    /*void DoWalk()
+    {
+        agent.destination = goal.position;
+            animator.SetBool("EnemyAttack", false);
+            animator.SetBool("EnemyIdle", false);
+            animator.SetBool("EnemyWalk", true);
+    }*/
+
+
+    void DoIdle()
+    {
+        //animator.SetBool("WalkAttack", false);
+        animator.SetBool("Attack", false);
+        //animator.SetBool("Walk", false);
+        animator.SetBool("Idle", true);
+    }
+
+    void DoAttack()
+    {
+        animator.SetBool("Idle", false);
+        //animator.SetBool("Walk", false);
+        //animator.SetBool("WalkAttack", false);
+        animator.SetBool("Attack", true);
     }
 
 }

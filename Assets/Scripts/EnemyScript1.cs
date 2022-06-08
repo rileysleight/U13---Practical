@@ -44,6 +44,7 @@ public class EnemyScript1 : MonoBehaviour
         if( state == States.Idle )
         {
             animator.SetBool("EnemyWalk", false);
+            animator.SetBool("EnemyAttack", false);
             animator.SetBool("EnemyIdle", true);
             transform.LookAt(goal.transform);
             if (dist <= 6)
